@@ -1,0 +1,143 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fnil\fcharset0 HelveticaNeue;}
+{\colortbl;\red255\green255\blue255;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\margl1440\margr1440\vieww20520\viewh8080\viewkind0
+\deftab720
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl320
+\ls1\ilvl0
+\f0\fs22 \cf0 Madeleine Pascolini-Campbell\
+map2251@columbia.edu\
+\
+1)\expnd0\expndtw0\kerning0
+\'a0wc -ls signif.txt.tsv =\'a05959
+\f1\fs24 \expnd0\expndtw0\kerning0
+\
+\pard\pardeftab720\sl320\sa240
+\cf0 \expnd0\expndtw0\kerning0
+\
+\pard\pardeftab720
+
+\f0\fs22 \cf0 \expnd0\expndtw0\kerning0
+2) awk '\{print NF\}' signif.txt.tsv |sort -nu | tail -n\'a0\
+= 47\
+\uc0\u8232 \
+3)cut row 3,10,18 from one file and make a new file\
+\uc0\u8232 \
+touch Year_Mag_Country.txt.tsv\
+touch Year_Mag_Country.txt\
+cut -f 3,10,18 signif.txt.tsv | paste Year_Mag_Country.tsv - > Year_Mag_Country.tsv\
+\uc0\u8232 \
+4)\'a0sort -k2n Year_Mag_Country.tsv\
+\uc0\u8232 \
+Top 10\
+	1965	 8.7	USA\
+	1716	 8.8	PERU\
+	1812	 8.8	USA\
+	2010	 8.8	CHILE\
+	1700	 9.0	USA\
+	1952	 9.0	RUSSIA\
+	2004	 9.1	INDONESIA\
+	2011	 9.1	JAPAN\
+	1964	 9.2	USA\
+\
+\pard\pardeftab720\sl320\sa240
+
+\f1\fs24 \cf0 \expnd0\expndtw0\kerning0
+			1960 9.5 CHILE\
+\pard\pardeftab720\sl320
+\cf0 \expnd0\expndtw0\kerning0
+5)\'a0
+\f0\fs22 \expnd0\expndtw0\kerning0
+cut -f 18 signif.txt.tsv | sort - | uniq | wc -l
+\f1\fs24 \expnd0\expndtw0\kerning0
+\
+
+\f0\fs22 \expnd0\expndtw0\kerning0
+=154 country
+\f1\fs24 \expnd0\expndtw0\kerning0
+\
+
+\f0\fs22 \expnd0\expndtw0\kerning0
+\
+6)\'a0grep 'USA' 'USA TERRITORY' Year_Mag_Country.txt | wc -l
+\f1\fs24 \expnd0\expndtw0\kerning0
+\
+
+\f0\fs22 \expnd0\expndtw0\kerning0
+\'a0= 294\'a0
+\f1\fs24 \expnd0\expndtw0\kerning0
+\
+
+\f0\fs22 \expnd0\expndtw0\kerning0
+\
+7)\'a0
+\f1\fs24 \expnd0\expndtw0\kerning0
+grep 'USA' Year_Mag_Country.txt | grep -v\'a0 -e 'TERRITORY' | wc -l\
+255\
+\
+8)\'a0\'a0cut -f 18 signif.txt.tsv | sort -k1 | uniq -c | sort -k1\
+\
+TOP TEN\
+\pard\pardeftab720\sl320\sa240
+\cf0 \expnd0\expndtw0\kerning0
+\'a0193 MEXICO\
+\'a0207 PHILIPPINES\
+\'a0255 USA\
+\'a0259 GREECE\
+\'a0319 TURKEY\
+\'a0324 ITALY\
+\'a0363 INDONESIA\
+\'a0365 IRAN\
+\'a0400 JAPAN\
+579 CHINA\
+9)\'a0nano countEq.sh\'a0\
+\pard\pardeftab720\sl320
+
+\f0\fs22 \cf0 \expnd0\expndtw0\kerning0
+cut -f 18 signif.txt.tsv | sort -k1 | uniq -c | grep -e \'93$1\'94\
+\uc0\u8232 \
+save and quit\
+eg-> bash countEq.sh USA\
+255 USA\'a0\
+39 USA TERRITORY\
+\uc0\u8232 \
+10)\'a0nano countEq_getLargestEq.sh\
+cut -f 18 signif.txt.tsv | sort -k2 | uniq -c | grep -e \'93$1" | awk '\{print $1\}\'92\
+cut -f 10,18 signif.txt.tsv | sort -k2 | uniq -c | grep -e \'93$1" | tail -1| awk '\{print $2\}\'92\
+\uc0\u8232 \
+eg. bash countEq_getLargestEq.sh FRANCE\
+42 %number equakes\
+8.0 % largest mag\
+\uc0\u8232 \
+11) #earthquake each year\
+cut -f 3 signif.txt.tsv | sort -k2 | uniq -c |\'a0 cut -f 3 signif.txt.tsv | sort -k2 | uniq -c\'a0\
+#top 10 sorted years\
+\uc0\u8232 \
+cut -f 3 signif.txt.tsv | sort -k1n\'a0 | uniq -c | sort -k1n | tail -10\
+\'a0\'a059 2011\
+\'a0 60 2002\
+\'a0 60 2005\
+\'a0 60 2009\
+\'a0 61 2006\
+\'a0 62 2010\
+\'a0 67 2007\
+\'a0 72 2003\
+\'a0 77 2008\
+\
+\'a0 78 2004\
+\uc0\u8232 \
+12)\'a0%scripts\
+\uc0\u8232 \
+nano top10files.sh\
+for YEAR in $(cut -f 3 signif.txt.tsv | sort -k1n\'a0 | uniq -c | sort -k1n |tail -10 | awk '\{print $2\}')\uc0\u8232 \
+do\
+echo $YEAR\
+touch $YEAR.tsv\
+cut -f 3,10,18 signif.txt.tsv | sort -k1n\'a0 | grep -e $YEAR | paste $YEAR.tsv -> $YEAR.tsv\
+\
+done\
+\uc0\u8232 \
+e.g. bash top10files.sh -> generates 10 .tsv files\
+}
