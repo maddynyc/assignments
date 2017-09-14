@@ -1,0 +1,95 @@
+﻿Madeleine Pascolini-Campbell
+map2251@columbia.edu
+
+1) wc -ls signif.txt.tsv = 5959
+
+2) awk '{print NF}' signif.txt.tsv |sort -nu | tail -n 
+= 47
+ 
+3)cut row 3,10,18 from one file and make a new file
+ 
+touch Year_Mag_Country.txt.tsv
+touch Year_Mag_Country.txt
+cut -f 3,10,18 signif.txt.tsv | paste Year_Mag_Country.tsv - > Year_Mag_Country.tsv
+ 
+4) sort -k2n Year_Mag_Country.tsv
+ 
+Top 10
+	1965	 8.7	USA
+	1716	 8.8	PERU
+	1812	 8.8	USA
+	2010	 8.8	CHILE
+	1700	 9.0	USA
+	1952	 9.0	RUSSIA
+	2004	 9.1	INDONESIA
+	2011	 9.1	JAPAN
+	1964	 9.2	USA
+
+			1960 9.5 CHILE
+5) cut -f 18 signif.txt.tsv | sort - | uniq | wc -l
+=154 country
+
+6) grep 'USA' 'USA TERRITORY' Year_Mag_Country.txt | wc -l
+ = 294 
+
+7) grep 'USA' Year_Mag_Country.txt | grep -v  -e 'TERRITORY' | wc -l
+255
+
+8)  cut -f 18 signif.txt.tsv | sort -k1 | uniq -c | sort -k1
+
+TOP TEN
+ 193 MEXICO
+ 207 PHILIPPINES
+ 255 USA
+ 259 GREECE
+ 319 TURKEY
+ 324 ITALY
+ 363 INDONESIA
+ 365 IRAN
+ 400 JAPAN
+579 CHINA
+9) nano countEq.sh 
+cut -f 18 signif.txt.tsv | sort -k1 | uniq -c | grep -e “$1”
+ 
+save and quit
+eg-> bash countEq.sh USA
+255 USA 
+39 USA TERRITORY
+ 
+10) nano countEq_getLargestEq.sh
+cut -f 18 signif.txt.tsv | sort -k2 | uniq -c | grep -e “$1" | awk '{print $1}’
+cut -f 10,18 signif.txt.tsv | sort -k2 | uniq -c | grep -e “$1" | tail -1| awk '{print $2}’
+ 
+eg. bash countEq_getLargestEq.sh FRANCE
+42 %number equakes
+8.0 % largest mag
+ 
+11) #earthquake each year
+cut -f 3 signif.txt.tsv | sort -k2 | uniq -c |  cut -f 3 signif.txt.tsv | sort -k2 | uniq -c 
+#top 10 sorted years
+ 
+cut -f 3 signif.txt.tsv | sort -k1n  | uniq -c | sort -k1n | tail -10
+  59 2011
+  60 2002
+  60 2005
+  60 2009
+  61 2006
+  62 2010
+  67 2007
+  72 2003
+  77 2008
+
+  78 2004
+ 
+12) %scripts
+ 
+nano top10files.sh
+for YEAR in $(cut -f 3 signif.txt.tsv | sort -k1n  | uniq -c | sort -k1n |tail -10 | awk '{print $2}') 
+do
+echo $YEAR
+touch $YEAR.tsv
+cut -f 3,10,18 signif.txt.tsv | sort -k1n  | grep -e $YEAR | paste $YEAR.tsv -> $YEAR.tsv
+
+done
+ 
+e.g. bash top10files.sh -> generates 10 .tsv files
